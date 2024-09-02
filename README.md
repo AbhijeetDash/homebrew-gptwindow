@@ -1,6 +1,6 @@
-# GPT Widget
+# GPT Window
 
-**GPT Widget** is an open-source version of VERA designed to provide quick access to popular AI models like ChatGPT, Google Gemini, Claude, and more. This lightweight tool allows users to interact with these models seamlessly through a simple, responsive window that appears with a single keyboard shortcut.
+**GPT Window** is an open-source version of VERA designed to provide quick access to popular AI models like ChatGPT, Google Gemini, Claude, and more. This lightweight tool allows users to interact with these models seamlessly through a simple, responsive window that appears with a single keyboard shortcut.
 
 ## Features
 
