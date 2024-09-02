@@ -46,6 +46,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late final WebViewController controller;
+  String errorStr = "";
+  bool isError = false;
 
   @override
   void initState() {
@@ -57,14 +59,24 @@ class _MyHomePageState extends State<MyHomePage> {
             // Update loading bar.
           },
           onPageStarted: (String url) {
-            // print(url);
+            setState(() {
+              isError == false;
+            });
           },
           onPageFinished: (String url) {
             // print(url);
           },
-          onHttpError: (HttpResponseError error) {},
+          onHttpError: (HttpResponseError error) {
+            errorStr = error.response!.statusCode.toString();
+            setState(() {
+              isError == true;
+            });
+          },
           onWebResourceError: (WebResourceError error) {
-            // print(error);
+            errorStr = error.description;
+            setState(() {
+              isError == true;
+            });
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.startsWith('https://www.youtube.com/')) {
@@ -81,6 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: WebViewWidget(controller: controller));
+      body: !isError?
+      WebViewWidget(controller: controller):Center(child: Text(errorStr),),
+    );
   }
 }
