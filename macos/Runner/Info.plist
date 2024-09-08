@@ -28,5 +28,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSOpenPanelUsageDescription</key>
+	<string>This app needs access to your files for uploading.</string>
 </dict>
 </plist>
