@@ -34,7 +34,7 @@ class AppDelegate: FlutterAppDelegate {
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
 
             // Calculate the position aligned to the left and centered vertically
-            let windowWidth: CGFloat = 450 // Replace with your desired window width
+            let windowWidth: CGFloat = 500 // Replace with your desired window width
             let windowHeight: CGFloat = 900 // Replace with your desired window height
             let initialPosition = CGPoint(x: screenFrame.minX - window.frame.width - 50, 
                                             y: window.frame.origin.y)
@@ -68,7 +68,7 @@ class AppDelegate: FlutterAppDelegate {
     }
 
     @objc func setWindowWidth(window: NSWindow) {
-        let windowWidth: CGFloat = 450 // Replace with your desired window width
+        let windowWidth: CGFloat = 500 // Replace with your desired window width
         let windowHeight: CGFloat = 900 // Replace with your desired window height
         window.setContentSize(NSSize(width: windowWidth, height: windowHeight))
     }

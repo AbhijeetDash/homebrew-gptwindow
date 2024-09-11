@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gptwidget/window/window_widget.dart';
+import 'package:gptwidget/windows/window_widget.dart';
 
 class GPTWidget extends StatefulWidget {
   const GPTWidget({super.key});
@@ -18,6 +18,7 @@ class _GPTWidgetState extends State<GPTWidget> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.grey[900]
       ),
       debugShowCheckedModeBanner: false,
       home: const WidgetWindow(),
