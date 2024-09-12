@@ -61,6 +61,7 @@ class ServiceInitializedImpl extends ServiceInitializer {
 
   @override
   void initializeHotKeys() async {
+    // Need to get the saved hot key.
     hotKeyManager.register(
         HotKey(
             key: LogicalKeyboardKey.space,

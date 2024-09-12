@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum Assistants { gpt, claude, gemeni }
+enum Assistants { gpt, claude, gemini }
 
 extension on String {
   Assistants getAsistantFromName() {
@@ -9,17 +9,17 @@ extension on String {
         return Assistants.gpt;
       case "CLAUDE":
         return Assistants.claude;
-      case "GEMENI":
-        return Assistants.gemeni;
+      case "GEMINI":
+        return Assistants.gemini;
     }
     return Assistants.gpt;
   }
 }
 
 abstract class ServicePrefs {
-  void getDefaultAssistant();
+  Future<Assistants> getDefaultAssistant();
 
-  void setDefaultAssistant();
+  Future<void> setDefaultAssistant({required String agentName});
 }
 
 class ServicePrefsImpl extends ServicePrefs {
@@ -36,7 +36,8 @@ class ServicePrefsImpl extends ServicePrefs {
   }
 
   @override
-  void setDefaultAssistant() {
-    // TODO: implement setDefaultAssistant
+  Future<void> setDefaultAssistant({required String agentName}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("GPWI_AGENT_NAME", agentName);
   }
 }
