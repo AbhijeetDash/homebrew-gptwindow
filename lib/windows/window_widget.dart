@@ -38,13 +38,16 @@ class _WidgetWindowState extends State<WidgetWindow> {
     switch (defaultChatAgent) {
       case "Chat-GPT":
         defaultAgentUrl = "https://chatgpt.com/";
-        controller.loadRequest(Uri.parse(defaultAgentUrl));
         break;
       case "Gemini":
         defaultAgentUrl = "https://gemini.google.com/app?hl=en-IN";
-        controller.loadRequest(Uri.parse(defaultAgentUrl));
+        break;
+      case "Olm3.1-4B":
+        defaultAgentUrl = "http://localhost:3000/";
         break;
     }
+
+    controller.loadRequest(Uri.parse(defaultAgentUrl));
   }
 
   @override
@@ -66,137 +69,110 @@ class _WidgetWindowState extends State<WidgetWindow> {
           ),
           Expanded(
             flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (isExpanded) {
-                          shrinkWindow();
+            child: Container(
+              color: defaultChatAgent=="Chat-GPT"? const Color.fromARGB(255, 23, 23, 23) : Colors.grey[900],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          if (isExpanded) {
+                            shrinkWindow();
+                            return;
+                          }
+              
+                          expandWindow();
                           return;
-                        }
-
-                        expandWindow();
-                        return;
-                      },
-                      icon: const Icon(Icons.settings),
-                    ),
-                    if (isExpanded) ...[
-                      const Text(
-                        "Settings",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      )
-                    ]
-                  ],
-                ),
-                if (isExpanded)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 20.0),
-                        // const Text(
-                        //   "Hotkey Settings",
-                        //   style: TextStyle(color: Colors.white, fontSize: 18),
-                        // ),
-                        // const SizedBox(height: 12.0),
-                        // Container(
-                        //   height: 60,
-                        //   width: double.maxFinite,
-                        //   color: Colors.grey[850],
-                        //   alignment: Alignment.centerLeft,
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: 8.0, vertical: 8.0),
-                        //   child: Row(
-                        //     children: [
-                        //       Text(
-                        //         "CTRL + SPACE",
-                        //         style: TextStyle(
-                        //             color: Colors.white.withOpacity(0.3),
-                        //             fontSize: 16,
-                        //             fontWeight: FontWeight.w500),
-                        //       ),
-                        //       const Spacer(),
-                        //       InkWell(
-                        //         onTap: () {
-                        //           // Handle the record functionality.
-                        //         },
-                        //         child: Container(
-                        //           color: Colors.greenAccent,
-                        //           padding: const EdgeInsets.symmetric(
-                        //               horizontal: 12.0, vertical: 12.0),
-                        //           child: const Text("Record"),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 8.0),
-                        // const Text(
-                        //   "Hit ⏎ to save",
-                        //   style: TextStyle(color: Colors.white),
-                        // ),
-                        // const SizedBox(height: 20.0),
+                        },
+                        icon: const Icon(Icons.settings),
+                      ),
+                      if (isExpanded) ...[
                         const Text(
-                          "Assistant Settings",
+                          "Settings",
                           style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        const SizedBox(height: 12.0),
-                        Container(
-                          height: 60,
-                          width: double.maxFinite,
-                          color: Colors.grey[850],
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 8.0),
-                          child: DropdownButton<String>(
-                            menuWidth: 320,
-                            underline: const SizedBox(),
-                            dropdownColor: Colors.grey[900],
-                            icon: const Padding(
-                              padding: EdgeInsets.only(left: 250),
-                              child: Icon(Icons.arrow_drop_down),
-                            ),
-                            value: defaultChatAgent,
-                            items: const [
-                              DropdownMenuItem(
-                                value: "Chat-GPT",
-                                child: Text(
-                                  "Chat-GPT",
-                                  style: TextStyle(color: Colors.white),
+                        )
+                      ]
+                    ],
+                  ),
+                  if (isExpanded)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 20.0),
+                          const Text(
+                            "Assistant Settings",
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          const SizedBox(height: 12.0),
+                          Container(
+                            height: 60,
+                            width: double.maxFinite,
+                            color: Colors.grey[850],
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 8.0),
+                            child: DropdownButton<String>(
+                              menuWidth: 320,
+                              underline: const SizedBox(),
+                              dropdownColor: Colors.grey[900],
+                              icon: const Expanded(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(Icons.arrow_drop_down),
+                                  ],
                                 ),
                               ),
-                              DropdownMenuItem(
-                                value: "Gemini",
-                                child: Text(
-                                  "Gemini",
-                                  style: TextStyle(color: Colors.white),
+                              value: defaultChatAgent,
+                              items: const [
+                                DropdownMenuItem(
+                                  value: "Chat-GPT",
+                                  child: Text(
+                                    "Chat-GPT",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              )
-                            ],
-                            onChanged: (val) {
-                              defaultChatAgent = val ?? defaultChatAgent;
-                              setCurrentAgent();
-                              setState(() {});
-                            },
+                                DropdownMenuItem(
+                                  value: "Gemini",
+                                  child: Text(
+                                    "Gemini",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: "Olm3.1-4B",
+                                  child: Text(
+                                    "Ollama 3.1 4B",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                              onChanged: (val) {
+                                defaultChatAgent = val ?? defaultChatAgent;
+                                setCurrentAgent();
+                                setState(() {});
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        const Text(
-                          "Hit ⏎ to save",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  )
-              ],
+                          const SizedBox(height: 8.0),
+                          const Text(
+                            "Hit ⏎ to save",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    )
+                ],
+              ),
             ),
           ),
         ],
