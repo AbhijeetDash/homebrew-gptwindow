@@ -54,6 +54,7 @@ class ServiceInitializedImpl extends ServiceInitializer {
     if (Platform.isMacOS) {
       return;
     }
+
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
     });

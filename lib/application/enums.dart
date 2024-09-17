@@ -1,0 +1,1 @@
+enum Assistants { gpt, claude, gemini }
