@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+// ignore: must_be_immutable
 class GPWebView extends StatelessWidget {
   final String url;
   late WebViewController controller;

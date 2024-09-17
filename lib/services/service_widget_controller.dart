@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:gptwidget/services/service_prefs.dart';
+import 'package:window_manager/window_manager.dart';
 
 class ServiceWidgetController extends ChangeNotifier {
   String selectedAgentValue = "Chat-GPT";
   String selectedAgentUrl = "https://chatgpt.com/";
+  Size size = const Size(450, 900);
+
+  ServiceWidgetController(){
+    getDefaultSize();
+  }
+
+  void getDefaultSize() async {
+    ServicePrefs sharedPrefService = ServicePrefsImpl();
+    size = await sharedPrefService.getDefaultSize();
+    
+    // This is always in shrinked state
+    windowManager.setSize(Size(size.width, size.height));
+  }
 
   void changeSelectedAgent(String selection){
     if(selection == selectedAgentValue){

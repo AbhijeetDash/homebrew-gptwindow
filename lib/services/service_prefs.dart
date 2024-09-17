@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:gptwidget/application/enums.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -5,6 +7,12 @@ abstract class ServicePrefs {
   Future<Assistants> getDefaultAssistant();
 
   Future<void> setDefaultAssistant({required String agentName});
+
+  Future<void> saveDefaultWidth({required double width});
+
+  Future<void> saveDefaultHeight({required double height});
+
+  Future<Size> getDefaultSize();
 }
 
 class ServicePrefsImpl extends ServicePrefs {
@@ -27,6 +35,26 @@ class ServicePrefsImpl extends ServicePrefs {
   Future<void> setDefaultAssistant({required String agentName}) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("GPWI_AGENT_NAME", agentName);
+  }
+  
+  @override
+  Future<void> saveDefaultHeight({required double height}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setDouble("GPWI_HEIGHT", height);
+  }
+  
+  @override
+  Future<void> saveDefaultWidth({required double width}) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setDouble("GPWI_WIDTH", width);
+  }
+  
+  @override
+  Future<Size> getDefaultSize() async {
+    final prefs = await SharedPreferences.getInstance();
+    double width = prefs.getDouble("GPWI_WIDTH")??450.0;
+    double height = prefs.getDouble("GPWI_HEIGHT")??900.0;
+    return Size(width, height);
   }
 }
 

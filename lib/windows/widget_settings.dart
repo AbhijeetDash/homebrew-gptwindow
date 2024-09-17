@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gptwidget/services/service_prefs.dart';
 import 'package:gptwidget/services/service_widget_controller.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -12,32 +13,48 @@ class GPSettingsView extends StatefulWidget {
 }
 
 class _GPSettingsViewState extends State<GPSettingsView> {
+  late TextEditingController widthControler, heightControler;
+  late Size size;
+  
+  ServicePrefs sharedPrefService = ServicePrefsImpl();
   bool isExpanded = false;
 
   // Close the options window to the left.
   void shrinkWindow() {
-    // get the current width
-    double width = MediaQuery.of(context).size.width;
+    // get the current size
+    size = MediaQuery.of(context).size;
 
-    windowManager.setSize(Size(width-300, 900));
+    windowManager.setSize(Size(size.width - 350, size.height));
     isExpanded = !isExpanded;
     setState(() {});
   }
 
   // Open the options window to the left.
   void expandWindow() {
-     // get the current width
-    double width = MediaQuery.of(context).size.width;
-    windowManager.setSize(Size(width+300, 900));
+    // get the current size
+    size = MediaQuery.of(context).size;
+    windowManager.setSize(Size(size.width + 350, size.height));
     isExpanded = !isExpanded;
     setState(() {});
   }
 
   @override
+  void initState() {
+    widthControler = TextEditingController();
+    heightControler = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    size = MediaQuery.of(context).size;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: isExpanded? 300 : 50,
-      constraints: const BoxConstraints(maxWidth: 300, minWidth: 50),
+      width: isExpanded ? 350 : 50,
       color: widget.controller.currentAgentValue == "Chat-GPT"
           ? const Color.fromARGB(255, 16, 16, 16)
           : Colors.grey[900],
@@ -129,6 +146,8 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                       onChanged: (val) {
                         widget.controller
                             .changeSelectedAgent(val ?? "Chat-GPT");
+                        sharedPrefService.setDefaultAssistant(
+                            agentName: val ?? "Chat-GPT");
                         setState(() {});
                       },
                     ),
@@ -152,10 +171,61 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                     padding: const EdgeInsets.only(
                         left: 8.0, right: 8.0, top: 8.0, bottom: 12.0),
                     child: TextField(
+                      controller: widthControler,
                       keyboardType: TextInputType.number,
                       cursorColor: Colors.grey[500],
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(border: InputBorder.none),
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Current Width : ${size.width}",
+                        hintStyle: TextStyle(color: Colors.grey[600]),
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^(\d+)?\.?\d{0,2}'),
+                        ), // Allow numbers and one decimal
+                      ],
+                      onSubmitted: (val) {
+                        if(val==""){
+                          // Save the GPWI_WIDTH
+                          sharedPrefService.saveDefaultWidth(width: size.width);
+                          return;
+                        }
+                        // Save the GPWI_WIDTH
+                        sharedPrefService.saveDefaultWidth(width: double.parse(val));
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Container(
+                    height: 60,
+                    width: double.maxFinite,
+                    color: Colors.grey[850],
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8.0, top: 8.0, bottom: 12.0),
+                    child: TextField(
+                      controller: heightControler,
+                      keyboardType: TextInputType.number,
+                      cursorColor: Colors.grey[500],
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Current Height : ${size.height}",
+                          hintStyle: TextStyle(color: Colors.grey[600])),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^(\d+)?\.?\d{0,2}'),
+                        ), // Allow numbers and one decimal
+                      ],
+                      onSubmitted: (val) {
+                        // Save the GPWI_HEIGHT
+                        if(val==""){
+                          sharedPrefService.saveDefaultHeight(height: size.height);
+                          return;
+                        }
+                        sharedPrefService.saveDefaultHeight(height: double.parse(val));
+                      },
                     ),
                   ),
                   const SizedBox(height: 8.0),
