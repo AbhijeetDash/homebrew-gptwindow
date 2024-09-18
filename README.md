@@ -8,6 +8,22 @@
 - **WebView Integration**: Load AI models like ChatGPT (currently supported) directly in the app through embedded WebViews.
 - **Future Expansion**: The project is designed to be expandable, with plans to add support for Google Gemini, Claude, and other AI models in future releases.
 
+## Installation (brew)
+
+1.  **Tap repo using brew**
+    ```bash
+    brew tap AbhijeetDash/gptwindow
+    ```
+2. **Install the latest release**
+    ```bash
+    brew install --cask gpt-widget 
+    ```
+3. **Open the installed app**
+    ```bash
+    open /Applications/
+    ```
+    Right Click on gptwidget -> click open Anyways.
+
 ## Installation
 
 1. **Clone the Repository**:
