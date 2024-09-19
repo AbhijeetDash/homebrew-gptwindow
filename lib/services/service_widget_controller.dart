@@ -9,6 +9,14 @@ class ServiceWidgetController extends ChangeNotifier {
 
   ServiceWidgetController(){
     getDefaultSize();
+    getDefaultAgent();
+  }
+
+  Future<void> getDefaultAgent() async {
+    // get the last agent from shared prefs
+    ServicePrefs sharedPrefService = ServicePrefsImpl();
+    String assistants = await sharedPrefService.getDefaultAssistant();
+    changeSelectedAgent(assistants);
   }
 
   void getDefaultSize() async {
@@ -49,6 +57,8 @@ extension on String {
         return "https://gemini.google.com/app";
       case "Olm3.1-4B":
         return "https://localhost:3000";
+      case "Claude":
+        return "https://claude.ai/new";
       default:
         return "https://chatgpt.com/";
     }
