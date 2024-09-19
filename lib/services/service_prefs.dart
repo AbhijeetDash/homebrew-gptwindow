@@ -4,7 +4,7 @@ import 'package:gptwidget/application/enums.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ServicePrefs {
-  Future<Assistants> getDefaultAssistant();
+  Future<String> getDefaultAssistant();
 
   Future<void> setDefaultAssistant({required String agentName});
 
@@ -17,7 +17,7 @@ abstract class ServicePrefs {
 
 class ServicePrefsImpl extends ServicePrefs {
   @override
-  Future<Assistants> getDefaultAssistant() async {
+  Future<String> getDefaultAssistant() async {
     final prefs = await SharedPreferences.getInstance();
     String? strName = prefs.getString("GPWI_AGENT_NAME");
 
@@ -25,10 +25,10 @@ class ServicePrefsImpl extends ServicePrefs {
       // If this line shows error its because of Dart Extention on VSCode.
       // The extention is defined in the extentions.dart import above.
       // The Dart Extention is SHIT.
-      return strName.getAsistantFromName();
+      return strName;
     }
 
-    return Assistants.gpt;
+    return "gpt";
   }
 
   @override

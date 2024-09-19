@@ -13,11 +13,24 @@ class GPSettingsView extends StatefulWidget {
 }
 
 class _GPSettingsViewState extends State<GPSettingsView> {
+  final FocusNode claudeMessageFocusNode = FocusNode();
+
   late TextEditingController widthControler, heightControler;
   late Size size;
-  
+
   ServicePrefs sharedPrefService = ServicePrefsImpl();
   bool isExpanded = false;
+
+  void showMessageDialog(Widget child) {
+    claudeMessageFocusNode.requestFocus();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(child: child);
+      },
+    );
+  }
 
   // Close the options window to the left.
   void shrinkWindow() {
@@ -136,6 +149,13 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                           ),
                         ),
                         DropdownMenuItem(
+                          value: "Claude",
+                          child: Text(
+                            "Claude",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        DropdownMenuItem(
                           value: "Olm3.1-4B",
                           child: Text(
                             "Ollama 3.1 4B",
@@ -144,6 +164,10 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                         ),
                       ],
                       onChanged: (val) {
+                        if (val == "Claude") {
+                          showMessageDialog(claudeNoticeDialog());
+                        }
+
                         widget.controller
                             .changeSelectedAgent(val ?? "Chat-GPT");
                         sharedPrefService.setDefaultAssistant(
@@ -186,13 +210,15 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                         ), // Allow numbers and one decimal
                       ],
                       onSubmitted: (val) {
-                        if(val==""){
+                        if (val == "") {
                           // Save the GPWI_WIDTH
-                          sharedPrefService.saveDefaultWidth(width: size.width);
+                          sharedPrefService.saveDefaultWidth(
+                              width: size.width - 300);
                           return;
                         }
                         // Save the GPWI_WIDTH
-                        sharedPrefService.saveDefaultWidth(width: double.parse(val));
+                        sharedPrefService.saveDefaultWidth(
+                            width: double.parse(val));
                       },
                     ),
                   ),
@@ -220,11 +246,13 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                       ],
                       onSubmitted: (val) {
                         // Save the GPWI_HEIGHT
-                        if(val==""){
-                          sharedPrefService.saveDefaultHeight(height: size.height);
+                        if (val == "") {
+                          sharedPrefService.saveDefaultHeight(
+                              height: size.height);
                           return;
                         }
-                        sharedPrefService.saveDefaultHeight(height: double.parse(val));
+                        sharedPrefService.saveDefaultHeight(
+                            height: double.parse(val));
                       },
                     ),
                   ),
@@ -236,6 +264,58 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                 ],
               ),
             )
+        ],
+      ),
+    );
+  }
+
+  Widget claudeNoticeDialog() {
+    return Container(
+      width: 600,
+      height: 400,
+      color: Colors.grey[900],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "Login Note",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20.0),
+          const Text(
+            "When using Claude please sign-in with email instead of google-signin. Claude doesn't support google signin on WebViews.",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20.0),
+          KeyboardListener(
+            focusNode: claudeMessageFocusNode,
+            onKeyEvent: (val) {
+              if (val is KeyDownEvent) {
+                // Check if the Enter/Return key was pressed
+                if (val.logicalKey == LogicalKeyboardKey.enter) {
+                  // Dispose the popup.
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                }
+              }
+            },
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "Hit ⏎ to close\nTap here to close",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
         ],
       ),
     );
