@@ -112,6 +112,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fullscreen_window:
+    dependency: transitive
+    description:
+      name: fullscreen_window
+      sha256: b3502f890a875de6cd300b06cfc542e089a324faef6c4fb5d5528f9e2ea68d8d
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   hotkey_manager:
     dependency: "direct main"
     description:
@@ -469,14 +477,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.15.0"
-  webview_windows:
+  webview_win_floating:
     dependency: "direct main"
     description:
-      name: webview_windows
-      sha256: "47fcad5875a45db29dbb5c9e6709bf5c88dcc429049872701343f91ed7255730"
+      name: webview_win_floating
+      sha256: "3367f40141e0175d26736210af1ff55de06624fe004cbaedf07c294c04728181"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "2.2.9"
   window_manager:
     dependency: "direct main"
     description:

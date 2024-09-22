@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -135,35 +136,37 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                         ),
                       ),
                       value: widget.controller.currentAgentValue,
-                      items: const [
-                        DropdownMenuItem(
+                      items: [
+                        const DropdownMenuItem(
                           value: "Chat-GPT",
                           child: Text(
                             "Chat-GPT",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        DropdownMenuItem(
+                        const DropdownMenuItem(
                           value: "Gemini",
                           child: Text(
                             "Gemini",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        DropdownMenuItem(
-                          value: "Claude",
-                          child: Text(
-                            "Claude",
-                            style: TextStyle(color: Colors.white),
+                        if (!Platform.isWindows) ...const [
+                          DropdownMenuItem(
+                            value: "Claude",
+                            child: Text(
+                              "Claude",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
-                        DropdownMenuItem(
-                          value: "Olm3.1-4B",
-                          child: Text(
-                            "Ollama 3.1 4B",
-                            style: TextStyle(color: Colors.white),
+                          DropdownMenuItem(
+                            value: "Olm3.1-4B",
+                            child: Text(
+                              "Ollama 3.1 4B",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
+                        ]
                       ],
                       onChanged: (val) {
                         if (val == "Claude") {
@@ -176,8 +179,17 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                             agentName: val ?? "Chat-GPT");
                         setState(() {});
 
-                        if(Platform.isWindows){
-                          shrinkWindow();
+                        if (Platform.isWindows) {
+                          size = MediaQuery.of(context).size;
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((callback) {
+                            windowManager
+                                .setSize(Size(size.width - 1, size.height));
+                            Timer(const Duration(milliseconds: 5), () {
+                              windowManager
+                                  .setSize(Size(size.width + 1, size.height));
+                            });
+                          });
                         }
                       },
                     ),

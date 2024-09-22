@@ -62,7 +62,7 @@ class ServiceInitializedImpl extends ServiceInitializer {
         skipTaskbar: false,
         titleBarStyle: TitleBarStyle.hidden,
         windowButtonVisibility: false,
-        size: Size(550, 730));
+        size: Size(550, 760));
 
     _resetWindowSize();
 
@@ -91,7 +91,7 @@ class ServiceInitializedImpl extends ServiceInitializer {
   Future<void> _resetWindowSize() async {
     try {
       if (Platform.isWindows) {
-        windowManager.setSize(const Size(550, 730));
+        windowManager.setSize(const Size(550, 760));
         return;
       }
       await platform.invokeMethod('resetWindowWidth');
