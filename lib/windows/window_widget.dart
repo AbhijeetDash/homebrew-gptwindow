@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gptwidget/services/service_widget_controller.dart';
 import 'package:gptwidget/windows/widget_settings.dart';
 import 'package:gptwidget/windows/widget_webview.dart';
+import 'package:gptwidget/windows/widget_win_webview.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
 /// The window is supposed to have expand collaps functionality
@@ -28,14 +31,19 @@ class _WidgetWindowState extends State<WidgetWindow> {
     return Scaffold(
       body: Row(
         children: [
-          Expanded(
-            child: ListenableBuilder(
-              listenable: controller,
-              builder: (context, val) {
-                return GPWebView(url: controller.selectedAgentUrl);
-              },
+          if(!Platform.isWindows)
+            Expanded(
+              child: ListenableBuilder(
+                listenable: controller,
+                builder: (context, val) {
+                  return GPWebView(url: controller.selectedAgentUrl);
+                },
+              ),
             ),
-          ),
+          if(Platform.isWindows)
+            Expanded(child: WindowsWebViewImpl(
+              controller: controller
+            )),
           GPSettingsView(
             controller: controller,
           )

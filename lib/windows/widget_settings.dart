@@ -39,7 +39,6 @@ class _GPSettingsViewState extends State<GPSettingsView> {
   void shrinkWindow() {
     // get the current size
     size = MediaQuery.of(context).size;
-
     windowManager.setSize(Size(size.width - 350, size.height));
     isExpanded = !isExpanded;
     setState(() {});
@@ -178,19 +177,6 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                         sharedPrefService.setDefaultAssistant(
                             agentName: val ?? "Chat-GPT");
                         setState(() {});
-
-                        if (Platform.isWindows) {
-                          size = MediaQuery.of(context).size;
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((callback) {
-                            windowManager
-                                .setSize(Size(size.width - 1, size.height));
-                            Timer(const Duration(milliseconds: 5), () {
-                              windowManager
-                                  .setSize(Size(size.width + 1, size.height));
-                            });
-                          });
-                        }
                       },
                     ),
                   ),
