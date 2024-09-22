@@ -61,10 +61,28 @@ class AppDelegate: FlutterAppDelegate {
             } else if call.method == "resetWindowWidth" {
                 self.setWindowWidth(window: window)
                 result(nil)
+            } else if call.method == "requestBrewAccessPermission" {
+                self.requestFolderAccess()
+                result(nil)
             } else {
                 result(FlutterMethodNotImplemented)
             }
         })
+    }
+    
+    // Function to ask for directory access
+    @objc func requestFolderAccess() -> String? {
+        let openPanel = NSOpenPanel()
+        openPanel.message = "Select the directory you want to give access to"
+        openPanel.prompt = "Select"
+        openPanel.canChooseDirectories = true
+        openPanel.canChooseFiles = false
+        openPanel.allowsMultipleSelection = false
+        
+        if openPanel.runModal() == .OK {
+            return openPanel.url?.path
+        }
+        return nil
     }
 
     @objc func setWindowWidth(window: NSWindow) {

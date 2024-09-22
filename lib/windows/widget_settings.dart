@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gptwidget/services/service_prefs.dart';
 import 'package:gptwidget/services/service_widget_controller.dart';
+import 'package:gptwidget/windows/widget_ollama_installflow.dart';
 import 'package:window_manager/window_manager.dart';
 
 class GPSettingsView extends StatefulWidget {
@@ -168,6 +169,11 @@ class _GPSettingsViewState extends State<GPSettingsView> {
                           showMessageDialog(claudeNoticeDialog());
                         }
 
+                        if(val == "Olm3.1-4B"){
+                          showMessageDialog(ollamaSettingsDialog());
+                          return;
+                        }
+
                         widget.controller
                             .changeSelectedAgent(val ?? "Chat-GPT");
                         sharedPrefService.setDefaultAssistant(
@@ -266,6 +272,15 @@ class _GPSettingsViewState extends State<GPSettingsView> {
             )
         ],
       ),
+    );
+  }
+
+  Widget ollamaSettingsDialog(){
+    return Container(
+      width: 600,
+      height: 700,
+      color: Colors.grey[900],
+      child: const WidgetOllamaInstallflow()
     );
   }
 

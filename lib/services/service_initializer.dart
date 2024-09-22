@@ -14,6 +14,8 @@ enum LoginState {
 const platform = MethodChannel('com.vera.app');
 
 abstract class ServiceInitializer {
+  void requestRequiredPermission();
+
   void initializeWindowState();
 
   void initializeHotKeys();
@@ -92,6 +94,15 @@ class ServiceInitializedImpl extends ServiceInitializer {
   Future<void> _hideWindowInCurrentWorkspace() async {
     try {
       await platform.invokeMethod('hideWindowInCurrentWorkspace');
+    } on PlatformException catch (e) {
+      throw Exception("Failed to show window: ${e.message}");
+    }
+  }
+  
+  @override
+  void requestRequiredPermission() async {
+    try {
+      await platform.invokeMethod('requestBrewAccessPermission');
     } on PlatformException catch (e) {
       throw Exception("Failed to show window: ${e.message}");
     }
