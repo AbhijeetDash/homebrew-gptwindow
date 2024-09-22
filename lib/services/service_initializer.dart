@@ -22,8 +22,23 @@ abstract class ServiceInitializer {
 class ServiceInitializedImpl extends ServiceInitializer {
   bool isWindowVisible = true;
   late Offset initialPosition;
- 
+
   void _manageWindowView() async {
+    if (Platform.isWindows) {
+      // Manage this using window manager.
+      if (isWindowVisible) {
+        await windowManager.hide();
+        isWindowVisible = false;
+        return;
+      }
+
+      await windowManager.show();
+      await windowManager.focus();
+      isWindowVisible = true;
+
+      return;
+    }
+
     if (isWindowVisible) {
       _hideWindowInCurrentWorkspace();
       isWindowVisible = false;
@@ -42,12 +57,12 @@ class ServiceInitializedImpl extends ServiceInitializer {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = const WindowOptions(
-      center: false,
-      backgroundColor: Colors.transparent,
-      skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.hidden,
-      windowButtonVisibility: false,
-    );
+        center: false,
+        backgroundColor: Colors.transparent,
+        skipTaskbar: false,
+        titleBarStyle: TitleBarStyle.hidden,
+        windowButtonVisibility: false,
+        size: Size(550, 730));
 
     _resetWindowSize();
 
@@ -56,7 +71,7 @@ class ServiceInitializedImpl extends ServiceInitializer {
     }
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.show();
+      await windowManager.hide();
     });
   }
 
@@ -75,14 +90,23 @@ class ServiceInitializedImpl extends ServiceInitializer {
 
   Future<void> _resetWindowSize() async {
     try {
+      if (Platform.isWindows) {
+        windowManager.setSize(const Size(550, 730));
+        return;
+      }
       await platform.invokeMethod('resetWindowWidth');
     } catch (e) {
-       throw Exception("Failed to reset window: $e");
+      throw Exception("Failed to reset window: $e");
     }
   }
 
   Future<void> _showWindowInCurrentWorkspace() async {
     try {
+      if (Platform.isWindows) {
+        await windowManager.show();
+        await windowManager.focus();
+        return;
+      }
       await platform.invokeMethod('showWindowInCurrentWorkspace');
     } on PlatformException catch (e) {
       throw Exception("Failed to show window: ${e.message}");
@@ -91,6 +115,10 @@ class ServiceInitializedImpl extends ServiceInitializer {
 
   Future<void> _hideWindowInCurrentWorkspace() async {
     try {
+      if(Platform.isWindows){
+        await windowManager.hide();
+        return;
+      }
       await platform.invokeMethod('hideWindowInCurrentWorkspace');
     } on PlatformException catch (e) {
       throw Exception("Failed to show window: ${e.message}");

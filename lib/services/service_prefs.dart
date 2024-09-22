@@ -28,7 +28,7 @@ class ServicePrefsImpl extends ServicePrefs {
       return strName;
     }
 
-    return "gpt";
+    return "Chat-GPT";
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gptwidget/windows/window_widget.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class GPTWidget extends StatefulWidget {
   const GPTWidget({super.key});
 
@@ -21,6 +23,7 @@ class _GPTWidgetState extends State<GPTWidget> {
         scaffoldBackgroundColor: Colors.grey[900]
       ),
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       home: const WidgetWindow(),
     );
   }
